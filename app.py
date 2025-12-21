@@ -19,6 +19,7 @@ import pandas as pd
 from collections import Counter
 from pyecharts.charts import WordCloud, Bar, Pie, Line, Scatter, Radar, HeatMap
 from pyecharts import options as opts
+from streamlit.components.v1 import html
 
 # 常见停用词列表
 STOP_WORDS = set([
@@ -487,7 +488,8 @@ def main():
         chart = create_chart(top_words[:10], chart_type, title=f"{chart_type} - 词频排名前10")
         
         # 渲染图表
-        st_pyecharts(chart)
+        chart_html = chart.render_embed()
+        html(chart_html, height=600)
         
         # 显示清理后的文本（可选）
         if st.checkbox("显示清理后的文本"):
@@ -495,9 +497,6 @@ def main():
             st.text_area("", analyzer.cleaned_text, height=200)
 
 if __name__ == "__main__":
-    # 导入streamlit-pyecharts
-    from streamlit_echarts import st_pyecharts
-    
     # 初始化jieba
     jieba.initialize()
     
